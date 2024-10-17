@@ -1,0 +1,675 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="author" content="서치통">
+	<meta name="copyright" content="(주)미디어토마토">
+	<meta name="title" content="서치통">
+	<meta name="keywords" content="서치통">
+	<meta name="description" content="서치통!">
+	<meta name="Robots" content="index, follow">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="./images/search_icon.png">
+	<meta property="og:site_name" content="서치통">
+	<meta property="og:url" content="http://">
+	<meta property="og:title" content="서치통">
+	<meta property="og:description" content="서치통!">
+	<title>::: 서치통 ::: </title>
+
+	<link rel="shortcut icon" href="./images/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="./css/reset-min.css">
+	<link rel="stylesheet" type="text/css" href="./css/paper_client.css">
+	<link rel="stylesheet" type="text/css" href="./css/fullpage_client.css">
+	<link rel="stylesheet" type="text/css" href="./css/swiper.min.css">
+
+	<!--fontawesome-->
+	<script src="https://kit.fontawesome.com/fc9abeac58.js" crossorigin="anonymous"></script>
+
+	<script src="./js/paper_client.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.0.9/fullpage.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.0.9/vendors/scrolloverflow.min.js"></script>
+	<script src="./js/swiper.js"></script>
+
+</head>
+
+
+
+<body>
+	<nav class="top_menu">
+
+		<div class="logo_div">
+			<a href="./index_client.html" onClick="window.location.reload()"><img src="./images/top_logo3.png" /></a>
+			<div class="tog-menu">
+				<a href="" class="toggle-menu"><span></span></a>
+			</div>
+		</div>
+
+		<div class="hidden-menu title_div2">
+			<ul id="menu_client">
+				<li class="title"><a href="./index_client.html">서비스 소개</a></li>
+				<li class="title titleon"><a href="./client_ask.html">서치통 서비스</a></li>
+				<li class="title"><a href="./client_ask_vote.html">선거문자 발송 서비스</a></li>
+				<li class="title"><a href="http://request.searchtong.com/user/login">설문 작성하기</a></li>
+				<li class="title"><a href="https://www.searchtong.com">서치통 WEB</a></li>
+			</ul>
+		</div>
+
+		<div class="title_mode">
+			<a href="index.html"><img src="./images/mode2.png" alt=""></a>
+		</div>
+
+	</nav>
+
+
+	<script type="text/javascript">
+		//<![CDATA[
+		var _token = "PuRm2tSWoK2v3SvIhl6XqbHlN7B5TG4uKJdQyWoi";
+
+		var subContact = {
+
+			validateEmail: function (email) {
+				var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+				return re.test(email);
+			}
+			, validatePhone: function (phone) {
+				var phone = phone.replace(/\-/g, "");
+				var regExp = /^\d{3}\d{3,4}\d{4}$/
+					, regExp2 = /^\d{2,3}\d{3,4}\d{4}$/
+					;
+
+				return regExp.test(phone) || regExp2.test(phone)
+			}
+			, ajax_send_toggle: false
+			, ajaxSend: function () {
+				var contact_name = $("#contact_name").val() // 20
+					, contact_phone = $("#contact_phone").val() // 15
+					, contact_email = $("#contact_email").val() // 200
+					, contact_title = $("#contact_title").val() // 200
+					, contact_content = $("#contact_content").val() // 1000
+					;
+
+				if (!$.trim(contact_name).match(/^.{2,20}$/)) {
+					alert("2자 이상 20자 이내의 성함을 입력해주세요.");
+					$("#contact_name").focus();
+					return false;
+				}
+				if (!$.trim(contact_phone).match(/^(\d{3}\d{3,4}\d{4}|\d{2,3}\d{3,4}\d{4})$/)) {
+					alert("올바른 연락처를 숫자만 입력해주세요.");
+					$("#contact_phone").focus();
+					return false;
+				}
+				if (!$.trim(contact_email).match(/^[A-Za-z0-9](([_\.\-\+]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/)) {
+					alert("올바른 이메일 주소를 입력해주세요.");
+					$("#contact_email").focus();
+					return false;
+				}
+				if (!$.trim(contact_title).match(/^.{10,200}$/)) {
+					alert("10자 이상, 100자 이내의 제목을 입력해주세요.");
+					$("#contact_title").focus();
+					return false;
+				}
+
+				if ($("#contact_content").val().length < 9 || $("#contact_content").val().length > 1000) {
+					//        if(!$.trim($("#contact_content").val()).match(/^.{10,1000}$/)) {
+					alert("내용은 10자이상, 1000자 이내의 내용을 입력해주세요.123");
+					$("#contact_content").focus();
+					return false;
+				}
+
+				if (subContact.ajax_send_toggle) {
+					alert("전송중입니다.");
+					return false;
+				}
+				subContact.ajax_send_toggle = true;
+
+				$(".img_loader").show();
+
+
+				$.ajax({
+					url: '/ajax-contact-send',
+					data: {
+						_token: _token
+						, contact_name: contact_name
+						, contact_phone: contact_phone
+						, contact_email: contact_email
+						, contact_title: contact_title
+						, contact_content: contact_content
+					},
+					type: 'post',
+					dataType: 'json',
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						$(".img_loader").hide();
+						alert('시스템 오류: 죄송합니다. 메일 전송에 실패했습니다.');
+					},
+					success: function (response) {
+						$(".img_loader").hide();
+						subContact.ajax_send_toggle = false;
+
+						if (response.code == "200") {
+							alert("제휴 문의가 발송되었습니다. \n\n담당자 확인 후 연락 드리도록 하겠습니다.");
+							layer_close();
+						}
+						else {
+							alert("메일 전송에 실패하였습니다. \n\n메일 주소를 확인해주시고 다시 이용해주세요.");
+						}
+					}
+				});
+			}
+		};
+
+
+//]]>
+	</script>
+
+
+
+
+	<!-- <div id="fullpage"> -->
+
+	<!--(2305 추가):: -->
+	<div class="" id="ask_pg">
+
+		<div class="img_div">
+			<div class="ask_title">
+				<h2>문의하기</h2>
+				<p>1:1 상담을 통해 지원 범위와 견적 등을<br class="only_mobile"> 상세히 안내 받으실 수 있습니다.
+					<span>(아래 양식에 기입된 사항은 담당자 외 제3자가 열람하지 않습니다)</span>
+				</p>
+				<div class="ask_tab">
+					<ul>
+						<li class="tab_on"><a href="./client_ask.html">서치통 서비스</a></li>
+						<li><a href="./client_ask_vote.html">선거문자 발송 서비스</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="ask_cont">
+				<div class="panel only_pc" id="ask_panel">
+					<ul>
+						<li>
+							<h4>서치통 패널 이용<span>서치통에 설문을 등록하고 통계 분석 서비스와 언론 홍보 서비스를 이용해 보세요.</span></h4>
+							<div class="p_bun">
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">무료플랜의 모든 기능</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">서치통에 설문 등록 가능</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">참여자수 무제한</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">통계 분석 서비스 (4대 정기여론 조사 미디어토마토 제공)</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">조사결과 뉴스보도 (뉴스토마토 경제/ 산업면 보도)</span></p>
+							</div>
+						</li>
+						<li>
+							<h4>자체 패널 이용<span>자체 패널에게 설문을 공유하고 미디어토마토의 통계 분석 서비스를 이용해 보세요.</span></h4>
+							<div class="p_bun">
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">무료플랜의 모든 기능</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">참여자수 무제한</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">통계 분석 서비스 (4대 정기여론 조사 미디어토마토 제공)</span></p>
+							</div>
+						</li>
+					</ul>
+				</div>
+
+				<div class="panel_m only_mobile swiper-container_ask" id="ask_panel_m">
+					<ul class="swiper-wrapper">
+						<li class="swiper-slide">
+							<h4>서치통 패널 이용<span>서치통에 설문을 등록하고 통계 분석 서비스와 언론 홍보 서비스를 이용해 보세요.</span></h4>
+							<div class="p_bun">
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">무료플랜의 모든 기능</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">서치통에 설문 등록 가능</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">참여자수 무제한</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">통계 분석 서비스 (4대 정기여론 조사 미디어토마토 제공)</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">조사결과 뉴스보도 (뉴스토마토 경제/ 산업면 보도)</span></p>
+							</div>
+						</li>
+						<li class="swiper-slide">
+							<h4>자체 패널 이용<span>자체 패널에게 설문을 공유하고 미디어토마토의 통계 분석 서비스를 이용해 보세요.</span></h4>
+							<div class="p_bun">
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">무료플랜의 모든 기능</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">참여자수 무제한</span></p>
+								<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+										class="p_txt">통계 분석 서비스 (4대 정기여론 조사 미디어토마토 제공)</span></p>
+							</div>
+						</li>
+					</ul>
+				</div>
+
+				<script>
+				var swiper = new Swiper('.swiper-container_ask', {
+					slidesPerView: 'auto',
+					centeredSlides: true,
+					spaceBetween: 20,
+
+				});
+				</script>
+
+				<div class="service" id="ask_service">
+					<form method="post" name="csForm">
+
+						<div class="ser_sec1">
+							<h3>1. 사용을 원하시는 서비스를<br class="only_mobile">선택해 주세요.</h3>
+							<div class="tab">
+								<ul class="tabnav">
+									<li><a href="#tab01"><span></span>서치통 패널 이용</a></li>
+									<li><a href="#tab02"><span></span>자체 패널 이용</a></li>
+								</ul>
+								<div class="tabcontent">
+									<div id="tab01">
+										<div class="price_list">
+											<div class="list_top">
+												<p>Pricing</p>
+												<p>150,000원 + 100TTC~ / 1건당</p>
+											</div>
+											<div class="list_mid">
+												<ul class="pr_list">
+													<li>
+														<h5>설문 이용료</h5>
+														<p class="h5_p">150,000원 / 1건당</p>
+													</li>
+													<li>
+														<div>
+															<h5>패널 이용료</h5>
+															<p class="h5_p">1TTC~ / 1인당</p>
+														</div>
+														<ul class="sub_list">
+															<li>
+																<h6>패널 리워드</h6>
+																<p>0.3TTC~ / 1인당</p>
+															</li>
+															<li>
+																<h6>패널 리워드 수수료</h6>
+																<p>0.1TTC~ / 1인당</p>
+															</li>
+															<li>
+																<h6>패널 리워드 이용료</h6>
+																<p>0.6TTC~ / 1인당</p>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</div>
+											<div class="list_bottom">
+												<div class="listbt_txt">
+													<p>▪ 패널 이용료의 결제는 TTC 시세에 따릅니다.</p>
+													<p>▪ 패널 리워드 최소 금액은 참여자수 1인당 0.3TTC입니다.</p>
+													<p>▪ 패널 참여자수는 최저 100명입니다.</p>
+													<div id="list_more">
+													<p>▪ 패널 이용료의 결제는 TTC 시세에 따릅니다.</p>
+													<p>▪ 패널 리워드 최소 금액은 참여자수 1인당 0.3TTC입니다.</p>
+													<p>▪ 패널 참여자수는 최저 100명입니다.</p>
+													<p>▪ 패널 이용료의 결제는 TTC 시세에 따릅니다.</p>
+													<p>▪ 패널 리워드 최소 금액은 참여자수 1인당 0.3TTC입니다.</p>
+													<p>▪ 패널 참여자수는 최저 100명입니다.</p>
+													<p>▪ 패널 이용료의 결제는 TTC 시세에 따릅니다.</p>
+												</div>
+												</div>
+												<div class="btn_more">
+															<span class="more"></span></div> 
+											</div>
+										</div>
+										<div class="ser_sec2">
+											<h3>2. 신청자 정보를 입력해 주세요.</h3>
+											<ul class="cs_list">
+												<li>
+													<label for="csname01">담당자명<span></span></label>
+													<input type="text" placeholder="담당자명" id="csname01" class="csname01" name="csname01"
+														 required/>
+												</li>
+												<li>
+													<label for="cscom01">회사명<span></span></label>
+													<input type="text" placeholder="회사명" id="cscom01" class="cscom01" name="cscom01"
+													required/>
+												</li>
+												<li>
+													<label for="csphone01">담당자 연락처(전화번호)<span></span></label>
+													<input type="tel" placeholder="담당자 연락처(전화번호)" id="csphone01" name="csphone01"
+														class="csphone01"  required/>
+												</li>
+												<li>
+													<label for="csmail01">담당자 이메일<span></span></label>
+													<input type="email" placeholder="담당자 이메일" id="csemail01" name="csemail01"
+														class="csemail01"  required/>
+												</li>
+											</ul>
+										</div>
+										<div class="ser_sec3">
+											<h3>3. 문의내용을 입력해 주세요.</h3>
+											<textarea name="cstxt01" id="cstxt01" cols="30" rows="10" class="cstxt01"
+												placeholder="문의내용을 입력해 주세요." required></textarea>
+										</div>
+										<div class="btn_ask"><button type="button" id="btn_type1" class="btnSubmit" disabled>문의하기</button></div>
+									</div>
+
+									<div id="tab02">
+										<div class="price_list">
+											<div class="list_top">
+												<p>Pricing</p>
+												<p>100,000원 + 60TTC~ / 1건당</p>
+											</div>
+											<div class="list_mid">
+												<ul class="pr_list">
+													<li>
+														<h5>설문 이용료</h5>
+														<p class="h5_p">100,000원 / 1건당</p>
+													</li>
+													<li>
+														<div>
+															<h5>패널 이용료</h5>
+															<p class="h5_p">0.6TTC~ / 1인당</p>
+														</div>
+														<ul class="sub_list">
+															<li>
+																<h6>패널 리워드</h6>
+																<p>0.3TTC~ / 1인당</p>
+															</li>
+															<li>
+																<h6>패널 리워드 수수료</h6>
+																<p>0.1TTC~ / 1인당</p>
+															</li>
+															<li>
+																<h6>패널 리워드 이용료</h6>
+																<p>0.2TTC~ / 1인당</p>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</div>
+											<div class="list_bottom">
+												<div class="listbt_txt">
+													<p>▪ 패널 이용료의 결제는 TTC 시세에 따릅니다.</p>
+													<p>▪ 패널 리워드 최소 금액은 참여자수 1인당 0.3TTC입니다.</p>
+													<p>▪ 패널 참여자수는 최저 100명입니다.</p>
+													<div id="list_more2">
+													<p>▪ 패널 이용료의 결제는 TTC 시세에 따릅니다.</p>
+													<p>▪ 패널 리워드 최소 금액은 참여자수 1인당 0.3TTC입니다.</p>
+													<p>▪ 패널 참여자수는 최저 100명입니다.</p>
+													<p>▪ 패널 이용료의 결제는 TTC 시세에 따릅니다.</p>
+													<p>▪ 패널 리워드 최소 금액은 참여자수 1인당 0.3TTC입니다.</p>
+													<p>▪ 패널 참여자수는 최저 100명입니다.</p>
+													<p>▪ 패널 이용료의 결제는 TTC 시세에 따릅니다.</p>
+												</div>
+												</div>
+												<div class="btn_more">
+													<span class="more2"></span></div> 
+											</div>
+										</div>
+										<div class="ser_sec2">
+											<h3>2. 신청자 정보를 입력해 주세요.</h3>
+											<ul class="cs_list">
+												<li>
+													<label for="csname02">담당자명<span></span></label>
+													<input type="text" placeholder="담당자명" id="csname02" class="csname02" name="csname02"
+														 required/>
+												</li>
+												<li>
+													<label for="cscom02">회사명<span></span></label>
+													<input type="text" placeholder="회사명" id="cscom02" class="cscom02" name="cscom02"
+													required/>
+												</li>
+												<li>
+													<label for="csphone02">담당자 연락처(전화번호)<span></span></label>
+													<input type="tel" placeholder="담당자 연락처(전화번호)" id="csphone02" name="csphone02"
+														class="csphone02"  required/>
+												</li>
+												<li>
+													<label for="csmail02">담당자 이메일<span></span></label>
+													<input type="email" placeholder="담당자 이메일" id="csemail02" name="csemail02"
+														class="csemail02"  required/>
+												</li>
+											</ul>
+										</div>
+										<div class="ser_sec3">
+											<h3>3. 문의내용을 입력해 주세요.</h3>
+											<textarea name="cstxt02" id="cstxt02" cols="30" rows="10" class="cstxt02"
+												placeholder="문의내용을 입력해 주세요." required></textarea>
+										</div>
+										<div class="btn_ask"><button type="button" id="btn_type1" class="btnSubmit2" disabled>문의하기</button></div>
+ 
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+
+	</div>
+	<script>
+		$(function () {
+			$('.tabcontent > div').hide();
+			$('.tabnav a').click(function () {
+				$('.tabcontent > div').hide().filter(this.hash).fadeIn();
+				$('.tabnav a').removeClass('active');
+				$(this).addClass('active');
+				return false;
+			}).filter(':eq(0)').click();
+		});
+		
+	</script>
+
+	<script>
+	$(document).ready(function(){
+	  $('.more').click(function(){
+		if($('.more').hasClass('more')){
+		   $('.more').addClass('close').removeClass('more');
+		   $('#list_more').show();
+		}else if($('.close').hasClass('close')){
+		   $('.close').addClass('more').removeClass('close');  
+		   $('#list_more').hide();
+		}
+	  });
+
+	  $('.more2').click(function(){
+		if($('.more2').hasClass('more2')){
+		   $('.more2').addClass('close2').removeClass('more2');
+		   $('#list_more2').show();
+		}else if($('.close2').hasClass('close2')){
+		   $('.close2').addClass('more2').removeClass('close2');  
+		   $('#list_more2').hide();
+		}
+	  });
+	});
+
+	  </script>
+			<!--input button 활성화//tab1-->
+			<script>
+				const button = document.getElementsByClassName("btnSubmit")[0];
+				const inputNm = document.getElementsByClassName("csname01")[0];
+				const inputCo = document.getElementsByClassName("cscom01")[0];
+				const inputPh = document.getElementsByClassName("csphone01")[0];
+				const inputEm = document.getElementsByClassName("csemail01")[0];
+				const txtCs = document.getElementsByClassName("cstxt01")[0];
+	
+				inputNm.addEventListener("keyup", validate);
+				inputEm.addEventListener("keyup", validate);
+				inputPh.addEventListener("keyup", validate);
+				inputCo.addEventListener("keyup", validate);
+				txtCs.addEventListener("keyup", validate);
+	
+				function validate() {
+					if (!(inputNm.value && inputEm.value && inputPh.value && inputCo.value && txtCs.value)) {
+
+						button.classList.remove("buttonSubmitDisabled");
+					} else {
+						button.classList.add("buttonSubmitDisabled");
+						$('.btnSubmit').removeAttr("disabled");
+					}
+				}
+			</script>
+
+			<!--input button 활성화//tab2-->
+			<script>
+				const button2 = document.getElementsByClassName("btnSubmit2")[0];
+				const inputNm2 = document.getElementsByClassName("csname02")[0];
+				const inputCo2 = document.getElementsByClassName("cscom02")[0];
+				const inputPh2 = document.getElementsByClassName("csphone02")[0];
+				const inputEm2 = document.getElementsByClassName("csemail02")[0];
+				const txtCs2 = document.getElementsByClassName("cstxt02")[0];
+	
+				inputNm2.addEventListener("keyup", validate);
+				inputEm2.addEventListener("keyup", validate);
+				inputPh2.addEventListener("keyup", validate);
+				inputCo2.addEventListener("keyup", validate);
+				txtCs2.addEventListener("keyup", validate);
+	
+				function validate() {
+					if (!(inputNm2.value && inputEm2.value && inputPh2.value && inputCo2.value && txtCs2.value)) {
+
+						button2.classList.remove("buttonSubmitDisabled");
+					} else {
+						button2.classList.add("buttonSubmitDisabled");
+						$('.btnSubmit2').removeAttr("disabled");
+					}
+				}
+
+
+			</script>
+
+	<script>
+	$(document).ready(function(){
+	  $('.btnSubmit, .btnSubmit2').click(function(){
+		alert("문의가 성공적으로 접수되었습니다");
+		location.reload();
+	  });
+	});
+		</script>
+
+
+	<footer>
+		<div class="copyright">
+			<p><a href="https://www.searchtong.com/Terms?type=terms_of_service">이용약관</a><span>I</span><a
+					href="https://www.searchtong.com/Terms?type=privacy_policy">개인정보처리방침</a></p>
+			<p>copyright © Mediatomato All rights reserved.</p>
+			<p>대표이사 민남기<span></span>서울시 마포구 양화진 4길 32, <br class="only_mobile">4층 미디어토마토</p>
+			<p>제휴문의 02-2128-3805<span></span>고객센터 mito@etomato.com</p>
+		</div>
+	</footer>
+
+
+	<script>
+		$(".tog-menu .toggle-menu").click(function () {
+			$(this).toggleClass("on");
+			$(".hidden-menu").slideToggle();
+
+			return false;
+		});
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			$('#fullpage').fullpage({
+				//options here
+				autoScrolling: true,
+				scrollHorizontally: true
+			});
+
+			//methods
+			$.fn.fullpage.setAllowScrolling(false);
+		});
+
+		new fullpage('#fullpage', {
+
+			// 스크롤
+			css3: true,
+			scrollingSpeed: 700,
+			autoScrolling: true,
+			fitToSection: true,
+			scrollBar: false,
+			easing: 'easeInOutCubic',
+			easingcss3: 'ease',
+			loopBottom: false,
+			loopTop: false,
+			loopHorizontal: true,
+			continuousVertical: false,
+			continuousHorizontal: false,
+			scrollHorizontally: false,
+			interlockedSlides: false,
+			dragAndMove: false,
+			offsetSections: false,
+			resetSliders: false,
+			fadingEffect: false,
+			normalScrollElements: '#element1, .element2',
+			scrollOverflow: true,
+			scrollOverflowMacStyle: false,
+			scrollOverflowReset: false,
+			touchSensitivity: 5,
+			bigSectionsDestination: null,
+
+			// 접근성
+			keyboardScrolling: true,
+			animateAnchor: true,
+			recordHistory: true,
+
+			// 디자인
+			controlArrows: true,
+			controlArrowsHTML: [
+				'<div class="fp-arrow"></div>',
+				'<div class="fp-arrow"></div>'
+			],
+			verticalCentered: true,
+			sectionsColor: ['#ccc', '#fff'],
+			paddingTop: '3em',
+			paddingBottom: '10px',
+			fixedElements: '#header, .footer',
+			responsiveWidth: 800,
+			responsiveHeight: 0,
+			responsiveSlides: true,
+			parallax: false,
+			parallaxOptions: { type: 'reveal', percentage: 62, property: 'translate' },
+			dropEffect: false,
+			dropEffectOptions: { speed: 2300, color: '#F82F4D', zIndex: 9999 },
+			waterEffect: false,
+			waterEffectOptions: { animateContent: true, animateOnMouseMove: true },
+			cards: false,
+			cardsOptions: { perspective: 100, fadeContent: true, fadeBackground: true },
+
+			// 맞춤 선택자
+			sectionSelector: '.section',
+			slideSelector: '.slide',
+
+			lazyLoading: true,
+			observer: true,
+			credits: { enabled: true, label: 'Made with fullPage.js', position: 'right' },
+
+			// 사건(이벤트)
+			beforeLeave: function (origin, destination, direction, trigger) { },
+			onLeave: function (origin, destination, direction, trigger) { },
+			afterLoad: function (origin, destination, direction, trigger) { },
+			afterRender: function () { },
+			afterResize: function (width, height) { },
+			afterReBuild: function () { },
+			afterResponsive: function (isResponsive) { },
+			afterSlideLoad: function (section, origin, destination, direction, trigger) { },
+			onSlideLeave: function (section, origin, destination, direction, trigger) { },
+			onScrollOverflow: function (section, slide, position, direction) { },
+
+
+		});
+
+
+	</script>
+
+
+
+
+</body>
+
+</html>

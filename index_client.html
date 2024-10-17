@@ -1,0 +1,752 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="author" content="서치통">
+	<meta name="copyright" content="(주)미디어토마토">
+	<meta name="title" content="서치통">
+	<meta name="keywords" content="서치통">
+	<meta name="description" content="서치통!">
+	<meta name="Robots" content="index, follow">
+	<meta property="og:type" content="website">
+	<meta property="og:image" content="./images/search_icon.png">
+	<meta property="og:site_name" content="서치통">
+	<meta property="og:url" content="http://">
+	<meta property="og:title" content="서치통">
+	<meta property="og:description" content="서치통!">
+	<title>::: 서치통 ::: </title>
+
+	<link rel="shortcut icon" href="./images/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="./css/swiper.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/reset-min.css">
+	<link rel="stylesheet" type="text/css" href="./css/paper_client.css">
+	<link rel="stylesheet" type="text/css" href="./css/fullpage_client.css">
+
+	<!--fontawesome-->
+	<script src="https://kit.fontawesome.com/fc9abeac58.js" crossorigin="anonymous"></script>
+
+	<script src="./js/paper_client.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.0.9/fullpage.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.0.9/vendors/scrolloverflow.min.js"></script>
+	<script src="./js/swiper.js"></script>
+
+
+</head>
+
+
+
+<body>
+	<nav class="top_menu">
+
+		<div class="logo_div">
+			<a href="./index_client.html" onClick="window.location.reload()"><img src="./images/top_logo3.png" /></a>
+			<div class="tog-menu">
+				<a href="" class="toggle-menu"><span></span></a>
+			</div>
+		</div>
+
+		<div class="hidden-menu title_div2">
+			<ul id="menu_client">
+				<li class="title" data-menuanchor="slide1" id="moveTo1"><a href="./index_client.html" onClick="window.location.reload()">서비스 소개</a></li>
+				<li class="title"><a href="./client_ask.html">서치통 서비스</a></li>
+				<li class="title"><a href="./client_ask_vote.html">선거문자 발송 서비스</a></li>
+				<li class="title"><a href="http://request.searchtong.com/user/login">설문 작성하기</a></li>
+				<li class="title"><a href="https://www.searchtong.com">서치통 WEB</a></li>
+			</ul>
+		</div>
+
+		<div class="title_mode">
+			<a href="index.html"><img src="./images/mode2.png" alt=""></a>
+		</div>
+
+	</nav>
+
+	<script>
+		$(function(){
+			$("html, body").animate({ scrollTop: 0 }, "slow"); 
+		});
+	</script>
+
+
+	<script type="text/javascript">
+		//<![CDATA[
+		var _token = "PuRm2tSWoK2v3SvIhl6XqbHlN7B5TG4uKJdQyWoi";
+
+		var subContact = {
+
+			validateEmail: function (email) {
+				var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+				return re.test(email);
+			}
+			, validatePhone: function (phone) {
+				var phone = phone.replace(/\-/g, "");
+				var regExp = /^\d{3}\d{3,4}\d{4}$/
+					, regExp2 = /^\d{2,3}\d{3,4}\d{4}$/
+					;
+
+				return regExp.test(phone) || regExp2.test(phone)
+			}
+			, ajax_send_toggle: false
+			, ajaxSend: function () {
+				var contact_name = $("#contact_name").val() // 20
+					, contact_phone = $("#contact_phone").val() // 15
+					, contact_email = $("#contact_email").val() // 200
+					, contact_title = $("#contact_title").val() // 200
+					, contact_content = $("#contact_content").val() // 1000
+					;
+
+				if (!$.trim(contact_name).match(/^.{2,20}$/)) {
+					alert("2자 이상 20자 이내의 성함을 입력해주세요.");
+					$("#contact_name").focus();
+					return false;
+				}
+				if (!$.trim(contact_phone).match(/^(\d{3}\d{3,4}\d{4}|\d{2,3}\d{3,4}\d{4})$/)) {
+					alert("올바른 연락처를 숫자만 입력해주세요.");
+					$("#contact_phone").focus();
+					return false;
+				}
+				if (!$.trim(contact_email).match(/^[A-Za-z0-9](([_\.\-\+]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/)) {
+					alert("올바른 이메일 주소를 입력해주세요.");
+					$("#contact_email").focus();
+					return false;
+				}
+				if (!$.trim(contact_title).match(/^.{10,200}$/)) {
+					alert("10자 이상, 100자 이내의 제목을 입력해주세요.");
+					$("#contact_title").focus();
+					return false;
+				}
+
+				if ($("#contact_content").val().length < 9 || $("#contact_content").val().length > 1000) {
+					//        if(!$.trim($("#contact_content").val()).match(/^.{10,1000}$/)) {
+					alert("내용은 10자이상, 1000자 이내의 내용을 입력해주세요.123");
+					$("#contact_content").focus();
+					return false;
+				}
+
+				if (subContact.ajax_send_toggle) {
+					alert("전송중입니다.");
+					return false;
+				}
+				subContact.ajax_send_toggle = true;
+
+				$(".img_loader").show();
+
+
+				$.ajax({
+					url: '/ajax-contact-send',
+					data: {
+						_token: _token
+						, contact_name: contact_name
+						, contact_phone: contact_phone
+						, contact_email: contact_email
+						, contact_title: contact_title
+						, contact_content: contact_content
+					},
+					type: 'post',
+					dataType: 'json',
+					error: function (XMLHttpRequest, textStatus, errorThrown) {
+						$(".img_loader").hide();
+						alert('시스템 오류: 죄송합니다. 메일 전송에 실패했습니다.');
+					},
+					success: function (response) {
+						$(".img_loader").hide();
+						subContact.ajax_send_toggle = false;
+
+						if (response.code == "200") {
+							alert("제휴 문의가 발송되었습니다. \n\n담당자 확인 후 연락 드리도록 하겠습니다.");
+							layer_close();
+						}
+						else {
+							alert("메일 전송에 실패하였습니다. \n\n메일 주소를 확인해주시고 다시 이용해주세요.");
+						}
+					}
+				});
+			}
+		};
+
+
+//]]>
+	</script>
+
+
+
+
+	<div id="fullpage">
+		<!--no.1 // Slide 1 :: 서치통 일상의 모든것이 -->
+		<div class="slide section" id="slide1" data-anchor="one">
+
+			<div class="img_div">
+				<div class="slide1_left">
+					<img class="only_pc" src="./images/0_mobile01.png" alt="">
+					<img class="only_mobile" src="./images/0_mobile03.png" alt="">
+				</div>
+				<div class="slide1_right">
+					<h2 style="color:#4D55FB;">서치통</h2>
+					<p>
+						<span>조사</span>와 <span>홍보</span>를 향한<br>
+						새로운 <span>플랫폼</span>
+					</p>
+					<a href="./client_ask.html">
+						<img class="only_pc" src="./images/0_btn03.png" alt="">
+						<img class="only_mobile" src="./images/0_btn04.png" alt="">
+					</a>
+
+				</div>
+			</div>
+
+		</div>
+
+
+		<!--no.2 // Slide 1_2(2305 추가):: -->
+		<div class="slide section only_pc slide1_2" data-anchor="two" id="slide1_2">
+
+			<div class="img_div only_pc">
+				<img src="./images/sub_title_1_2.png" class="only_pc"/>
+				<div class="slide1_2_cont only_pc">
+					<div class="s1_2 panel only_pc">
+						<ul>
+							<li>
+								<h4>무료 사용<span>설문을 작성하고 링크로 공유해 보세요.<br><br></span></h4>
+								<div class="p_bun">
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">무제한 설문 작성</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">무제한 문항 작성</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">참여자수 최대 10명</span></p>
+								</div>
+							</li>
+							<li>
+								<h4>서치통 패널 이용<span>서치통에 설문을 등록하고 통계 분석 서비스와 언론 홍보 서비스를 이용해 보세요.</span></h4>
+								<div class="p_bun">
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">무료플랜의 모든 기능</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">서치통에 설문 등록 가능</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">참여자수 무제한</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">통계 분석 서비스 (4대 정기여론 조사 미디어토마토 제공)</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">조사결과 뉴스보도 (뉴스토마토 경제/ 산업면 보도)</span></p>
+								</div>
+								<div class="btn_ask"><a href="./client_ask.html"><span>문의하기</span></a></div>
+							</li>
+							<li>
+								<h4>자체 패널 이용<span>자체 패널에게 설문을 공유하고 미디어토마토의 통계 분석 서비스를 이용해 보세요.</span></h4>
+								<div class="p_bun">
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">무료플랜의 모든 기능</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">참여자수 무제한</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check.png" alt=""></span><span
+											class="p_txt">통계 분석 서비스 (4대 정기여론 조사 미디어토마토 제공)</span></p>
+								</div>
+								<div class="btn_ask"><a href="./client_ask.html"><span>문의하기</span></a></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<!--모바일ver no.2 // Slide 1_2(2305 추가):: -->
+		<div class="only_mobile" id="m1_2">
+			<div class="slide section fp-auto-height slide1_2">
+				<p class="m1_2_tit"><span>간단한 홍보,광고부터 참여자들의 생각까지</span>서치통 서비스를 시작해 보세요!</p>
+					<div class="s1_2 panel swiper-container1_2">
+						<ul class="swiper-wrapper">
+							<li class="swiper-slide">
+								<h4>무료 사용<span>설문을 작성하고 링크로 공유해 보세요.<br><br></span></h4>
+								<div class="p_bun">
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">무제한 설문 작성</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">무제한 문항 작성</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">참여자수 최대 10명</span></p>
+								</div>
+							</li>
+							<li class="swiper-slide">
+								<h4>서치통 패널 이용<span>서치통에 설문을 등록하고 통계 분석 서비스와 언론 홍보 서비스를 이용해 보세요.</span></h4>
+								<div class="p_bun">
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">무료플랜의 모든 기능</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">서치통에 설문 등록 가능</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">참여자수 무제한</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">통계 분석 서비스 (4대 정기여론 조사 미디어토마토
+											제공)</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">조사결과 뉴스보도 (뉴스토마토 경제/ 산업면
+											보도)</span></p>
+								</div>
+								<div class="btn_ask"><a href="./client_ask.html"><span>문의하기</span></a></div>
+							</li>
+							<li class="swiper-slide">
+								<h4>자체 패널 이용<span>자체 패널에게 설문을 공유하고 미디어토마토의 통계 분석 서비스를 이용해 보세요.</span></h4>
+								<div class="p_bun">
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">무료플랜의 모든 기능</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">참여자수 무제한</span></p>
+									<p><span class="ic_check"><img src="./images/icon_check_m.png"
+												alt=""></span><span class="p_txt">통계 분석 서비스 (4대 정기여론 조사 미디어토마토
+											제공)</span></p>
+								</div>
+								<div class="btn_ask"><a href="./client_ask.html"><span>문의하기</span></a></div>
+							</li>
+						</ul>
+					</div>
+				
+			</div>
+		</div>
+
+		
+
+		<!--no.3 // Slide 1_3(2305 추가):: -->
+		<div class="slide section only_pc" id="slide1_3" data-anchor="three">
+
+			<div class="img_div only_pc">
+				<img src="./images/sub_title_1_3.png" class="only_pc" />
+				<div class="slide1_3_cont">
+					<div class="s1_3">
+						<div id="swiper-container1_3" class="only_pc">
+							<ul class="ex_gallery swiper-wrapper">
+								<li class="swiper-slide">
+									<div></div>
+									<p>공공기관 이용객 만족도 조사</p>
+								</li>
+								<li class="swiper-slide">
+									<div></div>
+									<p>정책 홍보/조사</p>
+								</li>
+								<li class="swiper-slide">
+									<div></div>
+									<p>기업 상품 홍보/조사</p>
+								</li>
+								<li class="swiper-slide">
+									<div></div>
+									<p>교육기관 만족도 조사</p>
+								</li>
+								<li class="swiper-slide">
+									<div></div>
+									<p>업무 몰입도 조사</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<!--모바일 ver. no.3 // Slide 1_3(2305 추가):: -->
+		<div class="only_mobile" id="m1_3">
+			<div class="slide section fp-auto-height " id="slide1_3_m">
+				<p class="m1_3_tit">적용예시</p>
+				<div class="img_div ">
+					<div class="slide1_3_cont ">
+						<div class="s1_3 ">
+							<div id="swiper-container1_3_m">
+								<ul class="ex_gallery swiper-wrapper">
+									<li class="swiper-slide">
+										<div></div>
+										<p>공공기관 이용객 만족도 조사</p>
+									</li>
+									<li class="swiper-slide">
+										<div></div>
+										<p>정책 홍보/조사</p>
+									</li>
+									<li class="swiper-slide">
+										<div></div>
+										<p>기업 상품 홍보/조사</p>
+									</li>
+									<li class="swiper-slide">
+										<div></div>
+										<p>교육기관 만족도 조사</p>
+									</li>
+									<li class="swiper-slide">
+										<div></div>
+										<p>업무 몰입도 조사</p>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var swiper1_2 = new Swiper('.swiper-container1_2', {
+				slidesPerView: 'auto',
+				centeredSlides: true,
+				spaceBetween: 12,
+				//initialSlide: 1,
+
+			});
+
+			var swiper1_3 = new Swiper('#swiper-container1_3', {
+				slidesPerView: 'auto',
+				/* 		  centeredSlides: true, */
+				spaceBetween: 40,
+				// observer: true,
+				// observeParents: true,
+				//autoplay:2500,
+			});
+
+			var swiper1_3_m = new Swiper('#swiper-container1_3_m', {
+				slidesPerView: 'auto',
+				centeredSlides: true,
+				spaceBetween: 30,
+				//slidesOffsetBefore: 10,
+				//slidesOffsetAfter: 10,
+				//initialSlide: 1,
+				//autoplay: 2500,
+				//autoplayStopOnLast: false, // loop false also
+				//initialSlide: 0,
+
+
+			});
+
+
+/* 					var mySwiper = new Swiper ('.swiper-container1_3_m', {
+				initialSlide: 0,
+				// delay between transitions in ms
+				autoplay: 2500,
+				autoplayStopOnLast: false, // loop false also
+			    
+				// Distance between slides in px.
+				spaceBetween: 12,
+				//
+				slidesPerView: 5,
+				//
+				centeredSlides: true,
+				//
+				slidesOffsetBefore: 0,
+				//
+				grabCursor: true,
+			  })    */
+
+		</script>
+
+
+
+		<!--no.4 // Slide 5 :: 서치통 어떤 장점이 있는가? -->
+		<div class="slide section" id="slide5" data-anchor="four">
+			<div class="img_div">
+				<div class="img_div_main">
+					<img src="./images/2_contents01_1.png" />
+					<div class="img_div_top"><img src="./images/Group 8_1.png" alt=""></div>
+					<div class="img_div_right"><img src="./images/Group 9_1.png" alt=""></div>
+					<div class="img_div_left"><img src="./images/Group 10_1.png" alt=""></div>
+					<div class="img_div_right2"><img src="./images/Group 11.png" alt=""></div>
+				</div>
+			</div>
+		</div>
+
+
+		<!--no.5 // Slide 6 :: 서치통 서비스만의 장점1 -->
+		<div class="slide section" id="slide6" data-anchor="five">
+
+			<div class="img_div">
+				<img class="slide4_title_img only_mobile" src="./images/m_goodtit_1.png" />
+				<img class="only_pc" src="./images/2_main_text_1.png" />
+				<div class="slide4_cont">
+					<div class="sc01">
+						<img class="only_mobile" src="./images/sc01_img_11.png" alt="">
+						<img class="only_pc" src="./images/sc01_img_1.png" alt="">
+						<p>
+							<span><em>실시간</em> 관리 및 피드백</span>
+							설문지에 대한 실시간 관리 및 피드백으로 설문의 관리 효율을<br class="only_pc"> 극대화 할 수 있습니다.<br class="only_pc"><br
+								class="only_pc">현재 진행중인 설문의 참여자수 부터 현재 설문의 답변상황 까<br class="only_pc">지 확인하고, 더 나아가 설문 예약
+							또는 중지도 자유롭게 관리<br class="only_pc">할 수 있습니다.
+
+						</p>
+					</div>
+
+					<div class="sc01">
+						<img class="only_mobile" src="./images/sc02_img_11.png" alt="">
+						<img class="only_pc" src="./images/sc02_img_1.png" alt="">
+						<p>
+							<span><em>정확한</em> 통계 데이터</span>
+							나이, 성별, 지역별로 구분되는 설문 통계는 종료된 설문 뿐만 <br class="only_pc">아니라 진행중인 설문에 대해서도 확인할 수 있습니다.<br
+								class="only_pc"><br class="only_pc">설문에 대해 설문 참여자 집단에 대한 특성 통계, 각 설문 문항<br
+								class="only_pc">별 응답개수 통계 및 각 설문 문항에서의 구체적인 응답 분포까<br class="only_pc">지, 모든 통계 데이터를 확인할
+							수 있습니다.
+						</p>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+		<!--no.6 // Slide 7 :: 서치통 서비스만의 장점2 -->
+		<div class="slide section" id="slide7" data-anchor="six">
+
+			<div class="img_div">
+				<img class="only_pc" src="./images/2_main_text_2.png" />
+				<img class="only_mobile" src="./images/m_goodtit_2.png" />
+				<div class="slide4_cont">
+					<div class="sc01">
+						<img class="only_mobile" src="./images/sc01_img_21.png" alt="">
+						<img class="only_pc" src="./images/sc01_img_2.png" alt="">
+						<p>
+							<span><em>보상을 통한</em> 높은 참여율</span>
+							서치통은 쇼핑몰에서 사용 가능하고 현금화 또한 가능한 암호화<br class="only_pc">폐를 보상함으로써 사용자들의 참여율을 높이고 있습니다.<br
+								class="only_pc"><br class="only_pc">
+							설문 참여자에게 보상을 지급하는 서치통의 시스템은 타 사 대비<br class="only_pc"> 더 많은 참여자를 더 빠르게 설문으로 유입시킵니다.
+						</p>
+					</div>
+
+					<div class="sc01">
+						<img class="only_mobile" src="./images/sc02_img_21.png" alt="">
+						<img class="only_pc" src="./images/sc02_img_2.png" alt="">
+						<p>
+							<span>유권자 <em>관리</em></span>
+							어떤 특성의 유권자가 나의 설문에 많이 참여했는지를 파악하<br class="only_pc">여 설문의 참여 효율을 개선할 수 있습니다.<br
+								class="only_pc"><br class="only_pc">내가 작성한 설문에 어떤 특성의 유권자가 많은지에 대한 정보<br
+								class="only_pc">는 이후 설문 작성 시 타켓팅 정확도를 높이고 설문 참여 효율을<br class="only_pc"> 높일 수 있습니다.
+						</p>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+		<!--no.7 // Slide 8 :: 서치통 서비스만의 장점3 -->
+		<div class="slide section" id="slide8" data-anchor="seven">
+
+			<div class="img_div">
+				<img class="only_pc" src="./images/2_main_text_3.png" />
+				<img class="only_mobile" src="./images/m_goodtit_3.png" />
+				<div class="slide4_cont">
+					<div class="sc01">
+						<img class="only_mobile" src="./images/sc03_img_12.png" alt="">
+						<img class="only_pc" src="./images/sc03_img_1.png" alt="">
+						<p>
+							<span><em>기존 전화번호</em>를 서치통으로 유입</span>
+							의뢰인이 보유중인 전화번호로 서치통 가입 링크를 포함한 문자<br class="only_pc">를 발송하며, 해당 링크로 회원가입 및 패널가입을 하는 사용자<br
+								class="only_pc">는 추가 리워드를 받을 수 있습니다.
+						</p>
+					</div>
+
+					<div class="sc01">
+						<img class="only_mobile" src="./images/sc03_img_22.png" alt="">
+						<img class="only_pc" src="./images/sc03_img_2.png" alt="">
+						<p>
+							<span><em>새로운 유권자</em> 유입</span>
+							의뢰인은 인바운드 콜 서비스로 전화를 건 유권자에게 동의를<br class="only_pc"> 거친 후 서치통 가입 링크를 발송합니다. 서치통 가입 시 유권<br
+								class="only_pc">자는 리워드를 받을 수 있습니다.
+						</p>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+
+		<!--no.8 // Slide 9 -->
+		<div class="slide section" id="slide9" data-anchor="eight">
+
+			<div class="img_div">
+				<img class="only_mobile" src="./images/m_votetit.png" />
+				<div class="slide4_cont">
+					<div class="sc01">
+						<img class="only_mobile" src="./images/sc04_img_12.png" alt="일반적인 선거문자 발송 vs 서치통 선거문자 발송">
+
+						<img class="only_pc vote_img" src="./images/sc04_img_1.png" alt="일반적인 선거문자 발송 vs 서치통 선거문자 발송">
+						<p>
+							<img class="only_pc votetit" src="./images/votetit.png" />
+							<span class="only_pc"><em>안전한</em> 선거문자 발송</span>
+							서치통은 개인정보처리방침 동의를 거친 후 사용할 수 있습니다.<br><br>유권자의 정보는 개인정보처리방침에 의해 철저하고 안전하게<br
+								class="only_pc"> 보호됩니다. 의뢰인 또한 개인정보처리방침에 동의한 사용자들<br class="only_pc">을 상대로 안전한 선거문자 발송을
+							할 수 있습니다.
+						</p>
+						<div class="btn_ask"><a href="./client_ask_vote.html"><span>문의하기</span></a></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<!--no.9 // Slide 4 :: 타 업체 대비 20% 이상 -->
+		<div class="slide section" id="slide4" data-anchor="nine">
+			<div class="img_div">
+				<img class="slide3_title_img only_pc" src="./images/3_title_img_2_1.png" alt="타 업체 대비 20% 이상 저렵한 가격으로">
+				<img class="slide3_title_img only_mobile" src="./images/m_votesub.png" alt="타 업체 대비 20% 이상 저렵한 가격으로">
+
+				<div class="slide3_cont_img">
+					<img class="til3 only_pc" src="./images/4_text_img_left_1.png" alt="">
+					<!-- 				<img class="til3 only_mobile" src="./images/4_text_img_left_12.png" alt=""> -->
+					<img class="tim only_pc" src="./images/4_mobile_1.png" alt="">
+					<!-- 				<img class="tim only_mobile" src="./images/4_mobile_1.png" alt=""> -->
+					<img class="tir3 only_pc" src="./images/4_text_img_right_1.png" alt="">
+					<!-- 				<img class="tir3 only_mobile" src="./images/4_text_img_right_12.png" alt=""> -->
+					<img class="m_con_all only_mobile" src="./images/m_con_img.png" alt="">
+				</div>
+				<div class="btn_ask"><a href="./client_ask_vote.html"><span>문의하기</span></a></div>
+			</div>
+		</div>
+
+
+		<!--no.10 // Slide 10 -->
+		<div class="slide section" id="slide10" data-anchor="ten">
+			<div class="origin_div">
+				<div class="sub_title_div2">
+					<div>
+						<h3>서치통 <em>설문 작성하기</em></h3>
+						<p>
+							서치통에서 설문의 작성하고 의뢰해보세요. <br><br>경험한 적 없는 높은 자유도과 정확한 관리로 <br>
+							나만의 설문을 진행 할 수 있습니다.
+
+						</p>
+					</div>
+
+				</div>
+				<div class="img_div">
+					<a href="./client_ask.html"><img src="./images/7_btn04.png" /></a>
+				</div>
+				<div class="copyright">
+					<p><a href="https://www.searchtong.com/Terms?type=terms_of_service">이용약관</a> I <a
+							href="https://www.searchtong.com/Terms?type=privacy_policy">개인정보처리방침</a></p>
+					<p>copyright © Mediatomato All rights reserved.</p>
+					<p>대표이사 민남기 서울시 마포구 양화진 4길 32, <br class="only_mobile">4층 미디어토마토</p>
+					<p>제휴문의 02-2128-3805 고객센터 mito@etomato.com</p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+		$(".tog-menu .toggle-menu").click(function () {
+			$(this).toggleClass("on");
+			$(".hidden-menu").slideToggle();
+
+			return false;
+		});
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			$('#fullpage').fullpage({
+				//options here
+				autoScrolling: true,
+				scrollHorizontally: true
+			});
+
+			//methods
+			$.fn.fullpage.setAllowScrolling(false);
+		});
+
+		new fullpage('#fullpage', {
+			// 이동
+			menu: '#menu_client',
+			lockAnchors: true,
+			anchors: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight','nine','ten'],
+			//navigationTooltips: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight','nine','ten'],
+			navigation: false,
+			navigationPosition: 'right',
+
+			showActiveTooltip: true,
+			slidesNavigation: true,
+			slidesNavPosition: 'bottom',
+
+			// 스크롤
+			css3: true,
+			scrollingSpeed: 700,
+			autoScrolling: false,
+			fitToSection: false,
+			scrollBar: true,
+			easing: 'easeInOutCubic',
+			easingcss3: 'ease',
+			loopBottom: false,
+			loopTop: false,
+			loopHorizontal: true,
+			continuousVertical: false,
+			continuousHorizontal: false,
+			scrollHorizontally: false,
+			interlockedSlides: false,
+			dragAndMove: false,
+			offsetSections: false,
+			resetSliders: false,
+			fadingEffect: false,
+			normalScrollElements: '#element1, .element2',
+			scrollOverflow: true,
+			scrollOverflowMacStyle: false,
+			scrollOverflowReset: false,
+			touchSensitivity: 5,
+			bigSectionsDestination: null,
+
+			// 접근성
+			keyboardScrolling: true,
+			animateAnchor: true,
+			recordHistory: true,
+
+			// 디자인
+			controlArrows: true,
+			controlArrowsHTML: [
+				'<div class="fp-arrow"></div>',
+				'<div class="fp-arrow"></div>'
+			],
+			verticalCentered: true,
+			sectionsColor: ['#ccc', '#fff'],
+			paddingTop: '3em',
+			paddingBottom: '10px',
+			fixedElements: '#header, .footer',
+			responsiveWidth: 800,
+			responsiveHeight: 0,
+			responsiveSlides: true,
+			parallax: false,
+			parallaxOptions: { type: 'reveal', percentage: 62, property: 'translate' },
+			dropEffect: false,
+			dropEffectOptions: { speed: 2300, color: '#F82F4D', zIndex: 9999 },
+			waterEffect: false,
+			waterEffectOptions: { animateContent: true, animateOnMouseMove: true },
+			cards: false,
+			cardsOptions: { perspective: 100, fadeContent: true, fadeBackground: true },
+
+			// 맞춤 선택자
+			sectionSelector: '.section',
+			slideSelector: '.slide',
+
+			lazyLoading: true,
+			observer: true,
+			credits: { enabled: true, label: 'Made with fullPage.js', position: 'right' },
+
+			// 사건(이벤트)
+			beforeLeave: function (origin, destination, direction, trigger) { },
+			onLeave: function (origin, destination, direction, trigger) { },
+			afterLoad: function (origin, destination, direction, trigger) { },
+			afterRender: function () { },
+			afterResize: function (width, height) { },
+			afterReBuild: function () { },
+			afterResponsive: function (isResponsive) { },
+			afterSlideLoad: function (section, origin, destination, direction, trigger) { },
+			onSlideLeave: function (section, origin, destination, direction, trigger) { },
+			onScrollOverflow: function (section, slide, position, direction) { },
+
+
+		});
+
+
+	</script>
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="author" content="서치통">
+<meta name="copyright" content="(주)미디어토마토">
+<meta name="title" content="서치통">
+<meta name="keywords" content="서치통">
+<meta name="description" content="서치통!">
+<meta name="Robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:image" content="./images/search_icon.png">
+<meta property="og:site_name" content="서치통">
+<meta property="og:url" content="http://">
+<meta property="og:title" content="서치통">
+<meta property="og:description" content="서치통!">
+<title>::: 서치통 ::: </title>
+
+<link rel="shortcut icon" href="./images/favicon.ico">
+<link rel="stylesheet" type="text/css" href="./css/reset-min.css">
+<link rel="stylesheet" type="text/css" href="./css/paper.css">
+<link rel="stylesheet" type="text/css" href="./css/fullpage.css">
+
+<!--fontawesome-->
+<script src="https://kit.fontawesome.com/fc9abeac58.js" crossorigin="anonymous"></script>
+
+<!--script-->
+<script src="./js/paper.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.0.9/fullpage.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.0.9/vendors/scrolloverflow.min.js"></script>
+</head>
+
+
+
+<body>
+	<nav class="top_menu" >
+
+		<div class="logo_div" onclick="location.href='index.html'">
+			<img src="./images/top_logo.png"/>
+			<div class="tog-menu">
+				<a href="" class="toggle-menu"><span></span></a>
+			</div>
+		</div>
+
+		<div class="hidden-menu title_div2">
+			<ul id="menu">
+				<li class="title" data-menuanchor="slide2" id="moveTo2"><a href="#slide2" >서비스 소개</a></li>
+				<li class="title" data-menuanchor="slide5" id="moveTo5" ><a href="#slide5">보상 사용방법</a></li>
+				<li class="title" data-menuanchor="slide7" id="moveTo" ><a href="#slide7">다운로드</a></li>
+				<li class="title"><a href="https://www.searchtong.com">설문 참여하기</a></li>
+				<li class="title no-sub"><a href="index_client.html">의뢰하기</a></li>
+			</ul>
+		</div>
+		
+		<div class="title_mode">
+			<a href="index_client.html"><img src="./images/mode.png" alt=""></a>
+		</div>
+
+	</nav>
+
+
+<script type="text/javascript">
+//<![CDATA[
+var _token = "PuRm2tSWoK2v3SvIhl6XqbHlN7B5TG4uKJdQyWoi";
+
+var subContact = {
+
+    validateEmail : function (email) {
+        var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+        return re.test(email);
+    }
+    , validatePhone : function(phone) {
+        var phone = phone.replace(/\-/g,"");
+        var regExp = /^\d{3}\d{3,4}\d{4}$/
+                , regExp2 = /^\d{2,3}\d{3,4}\d{4}$/
+                ;
+
+        return regExp.test(phone) || regExp2.test(phone)
+    }
+    , ajax_send_toggle : false
+    , ajaxSend : function() {
+        var contact_name = $("#contact_name").val() // 20
+                , contact_phone = $("#contact_phone").val() // 15
+                , contact_email = $("#contact_email").val() // 200
+                , contact_title = $("#contact_title").val() // 200
+                , contact_content = $("#contact_content").val() // 1000
+            ;
+
+        if(!$.trim(contact_name).match(/^.{2,20}$/)) {
+            alert("2자 이상 20자 이내의 성함을 입력해주세요.");
+            $("#contact_name").focus();
+            return false;
+        }
+        if(!$.trim(contact_phone).match(/^(\d{3}\d{3,4}\d{4}|\d{2,3}\d{3,4}\d{4})$/)) {
+            alert("올바른 연락처를 숫자만 입력해주세요.");
+            $("#contact_phone").focus();
+            return false;
+        }
+        if(!$.trim(contact_email).match(/^[A-Za-z0-9](([_\.\-\+]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/)) {
+            alert("올바른 이메일 주소를 입력해주세요.");
+            $("#contact_email").focus();
+            return false;
+        }
+        if(!$.trim(contact_title).match(/^.{10,200}$/)) {
+            alert("10자 이상, 100자 이내의 제목을 입력해주세요.");
+            $("#contact_title").focus();
+            return false;
+        }
+
+        if($("#contact_content").val().length < 9 || $("#contact_content").val().length > 1000) {
+//        if(!$.trim($("#contact_content").val()).match(/^.{10,1000}$/)) {
+            alert("내용은 10자이상, 1000자 이내의 내용을 입력해주세요.123");
+            $("#contact_content").focus();
+            return false;
+        }
+
+        if(subContact.ajax_send_toggle) {
+            alert("전송중입니다.");
+            return false;
+        }
+        subContact.ajax_send_toggle = true;
+
+        $(".img_loader").show();
+
+
+        $.ajax({
+            url: '/ajax-contact-send',
+            data: {
+                _token : _token
+                , contact_name : contact_name
+                , contact_phone : contact_phone
+                , contact_email : contact_email
+                , contact_title : contact_title
+                , contact_content : contact_content
+            },
+            type: 'post',
+            dataType: 'json',
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                $(".img_loader").hide();
+                alert('시스템 오류: 죄송합니다. 메일 전송에 실패했습니다.');
+            },
+            success: function(response) {
+                $(".img_loader").hide();
+                subContact.ajax_send_toggle = false;
+
+                if(response.code == "200") {
+                    alert("제휴 문의가 발송되었습니다. \n\n담당자 확인 후 연락 드리도록 하겠습니다.");
+                    layer_close();
+                }
+                else {
+                    alert("메일 전송에 실패하였습니다. \n\n메일 주소를 확인해주시고 다시 이용해주세요.");
+                }
+            }
+        });
+    }
+};
+
+
+//]]>
+</script>
+
+
+
+	
+
+
+<div id="fullpage">
+	<!-- Slide 1-->
+	<div class="slide section" id="slide1" data-anchor="slide1">
+		<div class="img_div">
+			<div class="slide1_left">
+				<img class="only_pc" src="./images/0_mobile01.png" alt="">
+				<img class="only_mobile" src="./images/0_mobile02.png" alt="">
+			</div>
+			<div class="slide1_right">
+				<h2>서치통</h2>
+				<p>
+					일상의 모든것이 <span>데이터로!</span> <br>
+					설문조사 플랫폼
+				</p>
+				<a id="moveTo">
+					<img class="only_pc" src="./images/0_btn01.png" alt="">
+					<img class="only_mobile" src="./images/0_btn02.png" alt="">
+				</a>
+				
+			</div>
+		</div>
+		
+
+	</div>
+
+
+	<!-- Slide 2 -->
+	<div class="slide section" id="slide2" data-anchor="slide2">
+		<div class="img_div">
+			<div class="img_div_main">
+				<img src="./images/1_main_text.png"/>
+				<div class="img_div_top"><img src="./images/Group 5.png" alt=""></div>
+				<div class="img_div_right"><img src="./images/Group 6.png" alt=""></div>
+				<div class="img_div_left"><img src="./images/Group 7.png" alt=""></div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<!-- Slide 3 -->
+    <div class="slide section" id="slide3" data-anchor="slide3">
+    	
+		<div class="img_div">
+			<img class="slide3_title_img only_pc" src="./images/3_title_img.png" alt="">
+			<img class="slide3_title_img only_mobile" src="./images/3_title_img02.png" alt="">
+
+			<div class="slide3_cont_img">
+				<img class="til3 only_pc" src="./images/3_text_img_left.png" alt="">
+				<img class="til3 only_mobile" src="./images/3_text_img_left02.png" alt="">
+				<img class="tim only_pc" src="./images/3_mobile.png" alt="">
+				<img class="tim only_mobile" src="./images/3_mobile02.png" alt="">
+				<img class="tir3 only_pc" src="./images/3_text_img_right.png" alt="">
+				<img class="tir3 only_mobile" src="./images/3_text_img_right02.png" alt="">
+			</div>
+
+		</div>
+
+    </div>
+
+
+    <!-- Slide 4 -->
+	<div class="slide section " id="slide4" data-anchor="slide4">
+		<div class="img_div">
+			<img class="slide4_title_img only_mobile" src="./images/2_main_text02.png"/>
+			<img class="only_pc" src="./images/2_main_text.png"/>
+			<div class="slide4_cont">
+				<div class="sc01">
+					<img src="./images/sc01_img.png" alt="">
+					<p>
+						<span>사용자 <em>정보 보호</em></span>
+						불필요한 정보는 수집하지 않습니다. <br class="only_pc"><br class="only_pc">
+						서치통에 가입한 사용자는 성별, 나이, <br class="only_pc">
+						주소지등 정보를 자율적으로 입력합니다. <br class="only_pc"><br class="only_pc">
+						서치통 서비스를 사용함에 있어서 <br class="only_pc">
+						본인인증은 필요하지않습니다.
+					</p>
+				</div>
+				
+				<div class="sc01">
+					<img src="./images/sc02_img.png" alt="">
+					<p>
+						<span>사용자 <em>맞춤 설문</em></span>
+						서치통은 사용자 정보에 최적화된 설문을 <br class="only_pc">보내드립니다.<br class="only_pc"><br class="only_pc">
+						사용자 맞춤 설문을 통해 내가 사는 지역<br class="only_pc">
+						의 이슈, 내 나이대의 이슈, 또는 내 젠더<br class="only_pc">
+						의 이슈까지 받아볼 수 있습니다.
+					</p>
+				</div>
+				
+				<div class="sc01">
+					<img src="./images/sc03_img.png" alt="">
+					<p>
+						<span>사용자 <em>참여 보상</em></span>
+						서치통은 사용자는 설문에 참여하여 보상을 <br class="only_pc">
+						받을 수 있습니다.<br class="only_pc"><br class="only_pc">
+						서치통의 사용자 또한 서치통의 생태계에<br class="only_pc">
+						기여하고 있는 소중한 구성원입니다.<br class="only_pc"><br class="only_pc">
+						서치통은 설문에 참여하는 사용자들에게<br class="only_pc">
+						TTC 보상을 지급하고 있습니다.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Slide 5 -->
+	<div class="slide section" id="slide5" data-anchor="slide5" >
+		<div class="img_div">
+			<div class="img_div_main">
+				<img src="./images/2_contents01.png"/>
+				<div class="img_div_top"><img src="./images/Group 8.png" alt=""></div>
+				<div class="img_div_right"><img src="./images/Group 9.png" alt=""></div>
+				<div class="img_div_left"><img src="./images/Group 10.png" alt=""></div>
+			</div>
+		</div>
+    </div>
+
+
+	<!-- Slide 6 -->
+	<div class="slide section" id="slide6" data-anchor="slide6">
+		<div class="img_div">
+			<img class="only_pc" src="./images/3_main_text.png"/>
+			<img class="only_mobile" src="./images/3_main_text02.png"/>
+		</div>
+	</div>
+
+
+
+
+	<!-- Slide 7 -->
+	<div class="slide section" id="slide7" data-anchor="slide7">
+		<div class="origin_div">
+			<div class="sub_title_div2">
+				<div>
+					<h3>서치통 <em>다운로드</em></h3>
+					<p>
+						서치통을 다운로드 해보세요. <br>여러분의 시각과 생각이 세상을 바꿉니다.
+					</p>
+				</div>
+				<img src="./images/7_app_icon.png"/>
+			</div>				
+			<div class="img_div">
+				<a href="https://apps.apple.com/kr/app/id1608817437"><img src="./images/7_btn02.png"/></a>
+				<a href="https://play.google.com/store/apps/details?id=com.etomato.searchtong
+				"><img src="./images/7_btn03.png"/></a>
+				<a href="https://www.searchtong.com"><img src="./images/7_btn01.png"/></a>
+			</div>
+			<div class="copyright">
+				<p><a href="https://www.searchtong.com/Terms?type=terms_of_service">이용약관</a> I <a href="https://www.searchtong.com/Terms?type=privacy_policy">개인정보처리방침</a></p>
+				<p>Copyright © Mediatomato All rights reserved.</p>
+				<p>대표이사 민남기  I  서울시 마포구 양화진 4길 32, <br class="only_mobile">4층 미디어토마토</p>
+			</div>
+		</div>
+	</div>
+
+</div>
+	
+
+<script>
+	$(".tog-menu .toggle-menu").click(function() {
+		$(this).toggleClass("on");
+		$(".hidden-menu").slideToggle();
+
+			return false;
+	});
+	</script>
+
+	<script>
+	$(document).ready(function() {
+		$('#fullpage').fullpage({
+			//options here
+			autoScrolling:true,
+			scrollHorizontally: true
+		});
+
+		//methods
+		$.fn.fullpage.setAllowScrolling(false);
+		});
+
+		new fullpage('#fullpage', {
+		// 이동
+		menu: '#menu',
+		lockAnchors: true,
+		anchors:['slide1', 'slide2','slide3','slide4', 'slide5', 'slide6','slide7'],
+		navigation: true,
+		navigationPosition: 'right',
+	
+		showActiveTooltip: true,
+		slidesNavigation: true,
+		slidesNavPosition: 'bottom',
+
+		// 스크롤
+		css3: true,
+		scrollingSpeed: 700,
+		autoScrolling: true,
+		fitToSection: true,
+		scrollBar: false,
+		easing: 'easeInOutCubic',
+		easingcss3: 'ease',
+		loopBottom: false,
+		loopTop: false,
+		loopHorizontal: true,
+		continuousVertical: false,
+		continuousHorizontal: false,
+		scrollHorizontally: false,
+		interlockedSlides: false,
+		dragAndMove: false,
+		offsetSections: false,
+		resetSliders: false,
+		fadingEffect: false,
+		normalScrollElements: '#element1, .element2',
+		scrollOverflow: true,
+		scrollOverflowMacStyle: false,
+		scrollOverflowReset: false,
+		touchSensitivity: 15,
+		bigSectionsDestination: null,
+
+		// 접근성
+		keyboardScrolling: true,
+		animateAnchor: true,
+		recordHistory: true,
+
+		// 디자인
+		controlArrows: true,
+		controlArrowsHTML: [
+			'<div class="fp-arrow"></div>', 
+			'<div class="fp-arrow"></div>'
+		],
+		verticalCentered: true,
+		sectionsColor : ['#ccc', '#fff'],
+		paddingTop: '3em',
+		paddingBottom: '10px',
+		fixedElements: '#header, .footer',
+		responsiveWidth: 800,
+		responsiveHeight: 0,
+		responsiveSlides: true,
+		parallax: false,
+		parallaxOptions: {type: 'reveal', percentage: 62, property: 'translate'},
+		dropEffect: false,
+		dropEffectOptions: { speed: 2300, color: '#F82F4D', zIndex: 9999},
+		waterEffect: false,
+		waterEffectOptions: { animateContent: true, animateOnMouseMove: true},
+		cards: false,
+		cardsOptions: {perspective: 100, fadeContent: true, fadeBackground: true},
+
+		// 맞춤 선택자
+		sectionSelector: '.section',
+		slideSelector: '.slide',
+
+		lazyLoading: true,
+		observer: true,
+		credits: { enabled: true, label: 'Made with fullPage.js', position: 'right'},
+
+		// 사건(이벤트)
+		beforeLeave: function(origin, destination, direction, trigger){},
+		onLeave: function(origin, destination, direction, trigger){},
+		afterLoad: function(origin, destination, direction, trigger){},
+		afterRender: function(){},
+		afterResize: function(width, height){},
+		afterReBuild: function(){},
+		afterResponsive: function(isResponsive){},
+		afterSlideLoad: function(section, origin, destination, direction, trigger){},
+		onSlideLeave: function(section, origin, destination, direction, trigger){},
+		onScrollOverflow: function(section, slide, position, direction){},
+
+		
+	});
+		
+		
+	</script>
+
+	<script>
+	$(document).on('click', '#moveTo', function(){
+ 		 fullpage_api.moveTo('slide7', 7);
+	});
+	$(document).on('click', '#moveTo2', function(){
+ 		 fullpage_api.moveTo('slide2', 2);
+	});
+	$(document).on('click', '#moveTo5', function(){
+ 		 fullpage_api.moveTo('slide5', 5);
+	});
+	
+
+
+	</script>
+
+
+</body>
+</html>
