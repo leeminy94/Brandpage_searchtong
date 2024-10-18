@@ -4,7 +4,7 @@
 
 
 
-#### 일상의 모든것이 데이터로 설문조사 플랫폼 서치통 브랜드페이지
+#### 최고급 고량주 이홍주 브랜드페이지
 #### HTML, CSS, JAVASCRIPT 로 작업
 
-#### https://home.searchtong.com/index.html
+#### https://eto.tomato.co.kr/
